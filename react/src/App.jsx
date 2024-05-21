@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 function App() {
   const [position, setPosition] = useState("bottom-right");
+
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [unreadCountEventListenerAdded, setunreadCountIsEventListenerAdded] =
+    useState(false);
 
   const updateHelpshiftConfig = () => {
     window.Helpshift("updateHelpshiftConfig");
@@ -36,6 +40,29 @@ function App() {
   const enterFullScreen = () => {
     window.helpshiftConfig.widgetOptions.fullScreen = true;
     updateHelpshiftConfig();
+  };
+
+  const newUnreadMessagesEventHandler = useCallback((data) => {
+    setUnreadCount(data.unreadCount);
+  }, []);
+
+
+  const addMessageCountEvent = () => {
+    window.Helpshift(
+      "addEventListener",
+      "newUnreadMessages",
+      newUnreadMessagesEventHandler
+    );
+    setunreadCountIsEventListenerAdded(true);
+  };
+
+  const removeMessageCountEvent = () => {
+    window.Helpshift(
+      "removeEventListener",
+      "newUnreadMessages",
+      newUnreadMessagesEventHandler
+    );
+    setunreadCountIsEventListenerAdded(false);
   };
 
   return (
@@ -87,6 +114,22 @@ function App() {
             </div>
           </li>
         </ul>
+      </div>
+
+      <div>
+        <h3>Unread Message Count</h3>
+        <button onClick={addMessageCountEvent}>
+          Set unread message count event
+        </button>
+        <button onClick={removeMessageCountEvent}>
+          Unset unread message count event
+        </button>
+
+        {unreadCountEventListenerAdded && (
+          <>
+            <h4>Event added. Unread message count is : {unreadCount}</h4>
+          </>
+        )}
       </div>
     </>
   );
