@@ -7,6 +7,9 @@ function App() {
   const [unreadCountEventListenerAdded, setunreadCountIsEventListenerAdded] =
     useState(false);
 
+  const [message,setMessage] = useState("");
+  const [messageEventListenerAdded,setmessageEventListenerAdded] = useState(false);
+
   const updateHelpshiftConfig = () => {
     window.Helpshift("updateHelpshiftConfig");
   };
@@ -64,6 +67,20 @@ function App() {
     );
     setunreadCountIsEventListenerAdded(false);
   };
+
+  var messageAddEventHandler = useCallback( (data) =>{
+    setMessage(data.body);
+  },[]);
+
+  const addMessageEvent=()=>{
+    window.Helpshift("addEventListener", "messageAdd", messageAddEventHandler);
+    setmessageEventListenerAdded(true);
+  }
+
+  const removeMessageEvent=()=>{
+    window.Helpshift("removeEventListener", "messageAdd", messageAddEventHandler);
+    setmessageEventListenerAdded(false);
+  }
 
   return (
     <>
@@ -130,6 +147,17 @@ function App() {
             <h4>Event added. Unread message count is : {unreadCount}</h4>
           </>
         )}
+      </div>
+
+      <div>
+        <h3>Message add event</h3>
+        <button onClick={addMessageEvent}>
+          Set message add event
+        </button>
+        <button onClick={removeMessageEvent}>
+          Unset message add event
+        </button>
+        {messageEventListenerAdded && (<p>Message added is : <b>{message}</b></p>)}
       </div>
     </>
   );
