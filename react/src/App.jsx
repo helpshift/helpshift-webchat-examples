@@ -13,10 +13,22 @@ function App() {
     updateHelpshiftConfig();
   };
 
+  const handleLogin = () => {
+    window.helpshiftConfig.userId = "captain_planet";
+    window.helpshiftConfig.userEmail = "captain@example.com";
+    updateHelpshiftConfig();
+  };
+
   return (
     <>
       <h1>Webchat demo</h1>
       <button onClick={updateHelpshiftConfig}>Update Helpshift Config</button>
+
+      <div>
+        <h3>Login with helpshift</h3>
+        <button onClick={handleLogin}>Login</button>
+      </div>
+
       <div>
         <h3>Privacy Options</h3>
         <button onClick={enablePrivacy}>Enable Privacy</button>
