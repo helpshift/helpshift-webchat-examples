@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    margin: 40px;
+}
+
+button {
+    @apply border border-gray-300 hover:bg-gray-100 py-2 px-4 rounded-lg mr-2 shadow-md;
+}
