@@ -19,7 +19,7 @@ function App() {
   const [messageEventListenerIsAdded, setmessageEventListenerIsAdded] =
     useState(false);
 
-  const onHandleFullPrivacyChange = (e) => {
+  const onFullPrivacyChange = (e) => {
     const val = e.target.value;
     setSelectedPrivacyOption(val);
     if (val === "enable") {
@@ -30,7 +30,7 @@ function App() {
     window.Helpshift("updateHelpshiftConfig");
   };
 
-  const onHandleLogin = () => {
+  const onLogin = () => {
     window.helpshiftConfig.userId = "captain_planet12";
     window.helpshiftConfig.userEmail = "captain@example.com";
     window.Helpshift("updateHelpshiftConfig");
@@ -38,7 +38,7 @@ function App() {
     setMessage("");
   };
 
-  const onHandleLogout = () => {
+  const onLogout = () => {
     window.helpshiftConfig.userId = "";
     window.helpshiftConfig.userEmail = "";
     window.Helpshift("updateHelpshiftConfig");
@@ -46,7 +46,7 @@ function App() {
     setMessage("");
   };
 
-  const onHandleLauncherChange = (e) => {
+  const onLauncherChange = (e) => {
     const val = e.target.value;
     if (val == "showLauncher") {
       window.Helpshift("show");
@@ -67,7 +67,7 @@ function App() {
     window.Helpshift("updateHelpshiftConfig");
   };
 
-  const onHandleFullScreenChange = (e) => {
+  const onFullScreenChange = (e) => {
     const val = e.target.value;
     setSelectedFullScreenOption(val);
     if (val === "exitFullScreen") {
@@ -139,9 +139,9 @@ function App() {
             <h4 className="text-lg py-2">Login user</h4>
             <div>
               {isLoggedIn ? (
-                <button onClick={onHandleLogout}>Logout</button>
+                <button onClick={onLogout}>Logout</button>
               ) : (
-                <button onClick={onHandleLogin}>Login</button>
+                <button onClick={onLogin}>Login</button>
               )}
             </div>
           </div>
@@ -154,7 +154,7 @@ function App() {
                     type="radio"
                     value={"enable"}
                     checked={selectedPrivacyOption === "enable"}
-                    onChange={onHandleFullPrivacyChange}
+                    onChange={onFullPrivacyChange}
                     className="form-radio h-5 w-5 text-blue-600"
                   ></input>
                   <span className="ml-2 text-gray-700">
@@ -166,7 +166,7 @@ function App() {
                     type="radio"
                     value={"disable"}
                     checked={selectedPrivacyOption === "disable"}
-                    onChange={onHandleFullPrivacyChange}
+                    onChange={onFullPrivacyChange}
                     className="form-radio h-5 w-5 text-blue-600"
                   ></input>
                   <span className="ml-2 text-gray-700">
@@ -193,7 +193,7 @@ function App() {
                     type="radio"
                     value={"showLauncher"}
                     checked={selectedLauncherOption === "showLauncher"}
-                    onChange={onHandleLauncherChange}
+                    onChange={onLauncherChange}
                     className="form-radio h-5 w-5 text-blue-600"
                   ></input>
                   <span className="ml-2 text-gray-700">Show</span>
@@ -203,7 +203,7 @@ function App() {
                     type="radio"
                     value={"hideLauncher"}
                     checked={selectedLauncherOption === "hideLauncher"}
-                    onChange={onHandleLauncherChange}
+                    onChange={onLauncherChange}
                     className="form-radio h-5 w-5 text-blue-600"
                   ></input>
                   <span className="ml-2 text-gray-700">Hide</span>
@@ -239,7 +239,7 @@ function App() {
                     type="radio"
                     value={"enterFullScreen"}
                     checked={selectedFullScreenOption === "enterFullScreen"}
-                    onChange={onHandleFullScreenChange}
+                    onChange={onFullScreenChange}
                     className="form-radio h-5 w-5 text-blue-600"
                   ></input>
                   <span className="ml-2 text-gray-700">Enter</span>
@@ -249,7 +249,7 @@ function App() {
                     type="radio"
                     value={"exitFullScreen"}
                     checked={selectedFullScreenOption === "exitFullScreen"}
-                    onChange={onHandleFullScreenChange}
+                    onChange={onFullScreenChange}
                     className="form-radio h-5 w-5 text-blue-600"
                   ></input>
                   <span className="ml-2 text-gray-700">Exit</span>
