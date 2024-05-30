@@ -12,14 +12,14 @@ function App() {
   const [selectedLauncherOption, setSelectedLauncherOption] =
     useState("showLauncher");
 
-  const [unreadCount, setUnreadCount] = useState(0);
+  const [unreadMessageCount, setMessageUnreadCount] = useState(0);
   useState(false);
 
   const [message, setMessage] = useState("");
-  const [messageEventListenerAdded, setmessageEventListenerAdded] =
+  const [messageEventListenerIsAdded, setmessageEventListenerIsAdded] =
     useState(false);
 
-  const updateHelpshiftConfig = () => {
+  const onUpdateHelpshiftConfig = () => {
     window.Helpshift("updateHelpshiftConfig");
   };
 
@@ -31,7 +31,7 @@ function App() {
     return () => clearInterval(newInterval);
   }, [message]);
 
-  const handlePrivacyChange = (e) => {
+  const onHandleFullPrivacyChange = (e) => {
     const val = e.target.value;
     setSelectedPrivacyOption(val);
     if (val === "enable") {
@@ -39,24 +39,24 @@ function App() {
     } else {
       window.helpshiftConfig.fullPrivacy = false;
     }
-    updateHelpshiftConfig();
+    onUpdateHelpshiftConfig();
   };
 
-  const handleLogin = () => {
+  const onHandleLogin = () => {
     window.helpshiftConfig.userId = "captain_planet12";
     window.helpshiftConfig.userEmail = "captain@example.com";
-    updateHelpshiftConfig();
+    onUpdateHelpshiftConfig();
     setIsLoggedIn(true);
   };
 
-  const handleLogout = () => {
+  const onHandleLogout = () => {
     window.helpshiftConfig.userId = "";
     window.helpshiftConfig.userEmail = "";
-    updateHelpshiftConfig();
+    onUpdateHelpshiftConfig();
     setIsLoggedIn(false);
   };
 
-  const handleLauncherChange = (e) => {
+  const onHandleLauncherChange = (e) => {
     const val = e.target.value;
     if (val == "showLauncher") {
       window.Helpshift("show");
@@ -67,17 +67,17 @@ function App() {
     }
   };
 
-  const onChangeHandler = (e) => {
+  const onChangeWidgetPosition = (e) => {
     const value = e.target.value;
     setPosition(value);
   };
 
-  const handleWidgetPosition = () => {
+  const onWidgetPositionApply = () => {
     window.helpshiftConfig.widgetOptions.position = position;
-    updateHelpshiftConfig();
+    onUpdateHelpshiftConfig();
   };
 
-  const handleFullScreenChange = (e) => {
+  const onHandleFullScreenChange = (e) => {
     const val = e.target.value;
     setSelectedFullScreenOption(val);
     if (val === "exitFullScreen") {
@@ -86,12 +86,12 @@ function App() {
       window.helpshiftConfig.widgetOptions.fullScreen = true;
     }
 
-    updateHelpshiftConfig();
+    onUpdateHelpshiftConfig();
   };
 
   useEffect(() => {
     const newUnreadMessagesEventHandler = function (data) {
-      setUnreadCount(data.unreadCount);
+      setMessageUnreadCount(data.unreadCount);
     };
 
     window.Helpshift(
@@ -109,28 +109,28 @@ function App() {
     };
   }, []);
 
-  var messageAddEventHandler = useCallback((data) => {
+  const messageAddEventHandler = useCallback((data) => {
     setMessage(data.body);
   }, []);
 
-  const addMessageEvent = () => {
+  const onAddMessageEventClick = () => {
     window.Helpshift("addEventListener", "messageAdd", messageAddEventHandler);
-    setmessageEventListenerAdded(true);
+    setmessageEventListenerIsAdded(true);
   };
 
-  const removeMessageEvent = () => {
+  const onRemoveMessageEventClick = () => {
     window.Helpshift(
       "removeEventListener",
       "messageAdd",
       messageAddEventHandler
     );
-    setmessageEventListenerAdded(false);
+    setmessageEventListenerIsAdded(false);
     setMessage("");
   };
 
   return (
     <div className="max-w-3xl">
-      <h1 className="text-5xl text-center">Web Chat demo</h1>
+      <h1 className="text-5xl text-center">Web Chat</h1>
 
       <div className="w-full border-gray-300 mt-12 rounded-lg">
         <h3 className="py-2 pl-3 text-lg rounded-t-lg font-bold uppercase text-gray-800">
@@ -140,7 +140,7 @@ function App() {
           <div className="mt-2 flex justify-between">
             <h4 className="text-lg py-2">Update config</h4>
             <div>
-              <button onClick={updateHelpshiftConfig}>
+              <button onClick={onUpdateHelpshiftConfig}>
                 Update Helpshift Config
               </button>
             </div>
@@ -149,9 +149,9 @@ function App() {
             <h4 className="text-lg py-2">Login with helpshift</h4>
             <div>
               {isLoggedIn ? (
-                <button onClick={handleLogout}>Logout</button>
+                <button onClick={onHandleLogout}>Logout</button>
               ) : (
-                <button onClick={handleLogin}>Login</button>
+                <button onClick={onHandleLogin}>Login</button>
               )}
             </div>
           </div>
@@ -164,20 +164,20 @@ function App() {
                     type="radio"
                     value={"enable"}
                     checked={selectedPrivacyOption === "enable"}
-                    onChange={handlePrivacyChange}
+                    onChange={onHandleFullPrivacyChange}
                     className="form-radio h-5 w-5 text-blue-600"
                   ></input>
-                  <span className="ml-2 text-gray-700">Enable</span>
+                  <span className="ml-2 text-gray-700">Enable Full Privacy</span>
                 </label>
                 <label className="inline-flex items-center">
                   <input
                     type="radio"
                     value={"disable"}
                     checked={selectedPrivacyOption === "disable"}
-                    onChange={handlePrivacyChange}
+                    onChange={onHandleFullPrivacyChange}
                     className="form-radio h-5 w-5 text-blue-600"
                   ></input>
-                  <span className="ml-2 text-gray-700">Disable</span>
+                  <span className="ml-2 text-gray-700">Disable Full Privacy</span>
                 </label>
               </form>
             </div>
@@ -199,7 +199,7 @@ function App() {
                     type="radio"
                     value={"showLauncher"}
                     checked={selectedLauncherOption === "showLauncher"}
-                    onChange={handleLauncherChange}
+                    onChange={onHandleLauncherChange}
                     className="form-radio h-5 w-5 text-blue-600"
                   ></input>
                   <span className="ml-2 text-gray-700">Show</span>
@@ -209,7 +209,7 @@ function App() {
                     type="radio"
                     value={"hideLauncher"}
                     checked={selectedLauncherOption === "hideLauncher"}
-                    onChange={handleLauncherChange}
+                    onChange={onHandleLauncherChange}
                     className="form-radio h-5 w-5 text-blue-600"
                   ></input>
                   <span className="ml-2 text-gray-700">Hide</span>
@@ -223,7 +223,7 @@ function App() {
               <select
                 className=" appearance-none bg-white border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:border-gray-500"
                 value={position}
-                onChange={onChangeHandler}
+                onChange={onChangeWidgetPosition}
               >
                 <option value="bottom-right">bottom-right</option>
                 <option value="bottom-left">bottom-left</option>
@@ -231,7 +231,7 @@ function App() {
                 <option value="top-right">top-right</option>
               </select>
 
-              <button className="ml-3" onClick={handleWidgetPosition}>
+              <button className="ml-3" onClick={onWidgetPositionApply}>
                 Apply
               </button>
             </div>
@@ -245,7 +245,7 @@ function App() {
                     type="radio"
                     value={"enterFullScreen"}
                     checked={selectedFullScreenOption === "enterFullScreen"}
-                    onChange={handleFullScreenChange}
+                    onChange={onHandleFullScreenChange}
                     className="form-radio h-5 w-5 text-blue-600"
                   ></input>
                   <span className="ml-2 text-gray-700">Enter</span>
@@ -255,7 +255,7 @@ function App() {
                     type="radio"
                     value={"exitFullScreen"}
                     checked={selectedFullScreenOption === "exitFullScreen"}
-                    onChange={handleFullScreenChange}
+                    onChange={onHandleFullScreenChange}
                     className="form-radio h-5 w-5 text-blue-600"
                   ></input>
                   <span className="ml-2 text-gray-700">Exit</span>
@@ -273,21 +273,21 @@ function App() {
         <div className="m-3">
           <div className="mt-4 flex justify-between">
             <h3 className="text-lg py-2">Unread Message Count</h3>
-            <div className="mr-2 p-2">Count: {unreadCount}</div>
+            <div className="mr-2 p-2">Count: {unreadMessageCount}</div>
           </div>
 
           <div className="mt-4 flex justify-between">
             <h3 className="text-lg py-2">Message add event</h3>
             <div>
-              {messageEventListenerAdded ? (
-                <button onClick={removeMessageEvent}>Remove</button>
+              {messageEventListenerIsAdded ? (
+                <button onClick={onRemoveMessageEventClick}>Remove</button>
               ) : (
-                <button onClick={addMessageEvent}>Add</button>
+                <button onClick={onAddMessageEventClick}>Add</button>
               )}
             </div>
           </div>
           <div>
-            {messageEventListenerAdded && (
+            {messageEventListenerIsAdded && (
               <p>
                 Message added is : <b>{message}</b>
               </p>
