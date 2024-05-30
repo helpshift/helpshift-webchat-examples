@@ -1,19 +1,20 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const WebChatOptions = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [selectedPrivacyOption, setSelectedPrivacyOption] = useState("disable");
 
-
   const [selectedLauncherOption, setSelectedLauncherOption] =
     useState("showLauncher");
 
-    const [position, setPosition] = useState("bottom-right");
+  const [position, setPosition] = useState("bottom-right");
 
-    const [selectedFullScreenOption, setSelectedFullScreenOption] =
+  const [selectedFullScreenOption, setSelectedFullScreenOption] =
     useState("exitFullScreen");
+
+  const [unreadMessageCount, setMessageUnreadCount] = useState(0);
 
   const onLogin = () => {
     window.helpshiftConfig.userId = "captain_planet12";
@@ -72,6 +73,26 @@ const WebChatOptions = () => {
 
     window.Helpshift("updateHelpshiftConfig");
   };
+
+  useEffect(() => {
+    const newUnreadMessagesEventHandler = function (data) {
+      setMessageUnreadCount(data.unreadCount);
+    };
+
+    window.Helpshift(
+      "addEventListener",
+      "newUnreadMessages",
+      newUnreadMessagesEventHandler
+    );
+
+    return () => {
+      window.Helpshift(
+        "removeEventListener",
+        "newUnreadMessages",
+        newUnreadMessagesEventHandler
+      );
+    };
+  }, []);
 
   return (
     <>
@@ -132,7 +153,6 @@ const WebChatOptions = () => {
           </div>
         </div>
       </div>
-
 
       <div className="w-full   border-gray-300 mt-12 rounded-lg">
         <h3 className="py-2 pl-3 text-lg rounded-t-lg font-bold uppercase text-gray-800">
@@ -211,6 +231,18 @@ const WebChatOptions = () => {
                 </label>
               </form>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full   border-gray-300 mt-12 rounded-lg">
+        <h3 className="py-2 pl-3 text-lg rounded-t-lg font-bold uppercase text-gray-800">
+          Event handlers
+        </h3>
+        <div className="m-3">
+          <div className="mt-4 flex justify-between">
+            <h3 className="text-lg py-2">Unread Message Count</h3>
+            <div className="mr-2 p-2">Count: {unreadMessageCount}</div>
           </div>
         </div>
       </div>
