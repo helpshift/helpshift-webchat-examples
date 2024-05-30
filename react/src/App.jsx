@@ -19,18 +19,6 @@ function App() {
   const [messageEventListenerIsAdded, setmessageEventListenerIsAdded] =
     useState(false);
 
-  const onUpdateHelpshiftConfig = () => {
-    window.Helpshift("updateHelpshiftConfig");
-  };
-
-  useEffect(() => {
-    const newInterval = setInterval(() => {
-      setMessage("");
-    }, 3000);
-
-    return () => clearInterval(newInterval);
-  }, [message]);
-
   const onHandleFullPrivacyChange = (e) => {
     const val = e.target.value;
     setSelectedPrivacyOption(val);
@@ -39,21 +27,23 @@ function App() {
     } else {
       window.helpshiftConfig.fullPrivacy = false;
     }
-    onUpdateHelpshiftConfig();
+    window.Helpshift("updateHelpshiftConfig");
   };
 
   const onHandleLogin = () => {
     window.helpshiftConfig.userId = "captain_planet12";
     window.helpshiftConfig.userEmail = "captain@example.com";
-    onUpdateHelpshiftConfig();
+    window.Helpshift("updateHelpshiftConfig");
     setIsLoggedIn(true);
+    setMessage("");
   };
 
   const onHandleLogout = () => {
     window.helpshiftConfig.userId = "";
     window.helpshiftConfig.userEmail = "";
-    onUpdateHelpshiftConfig();
+    window.Helpshift("updateHelpshiftConfig");
     setIsLoggedIn(false);
+    setMessage("");
   };
 
   const onHandleLauncherChange = (e) => {
@@ -74,7 +64,7 @@ function App() {
 
   const onWidgetPositionApply = () => {
     window.helpshiftConfig.widgetOptions.position = position;
-    onUpdateHelpshiftConfig();
+    window.Helpshift("updateHelpshiftConfig");
   };
 
   const onHandleFullScreenChange = (e) => {
@@ -86,7 +76,7 @@ function App() {
       window.helpshiftConfig.widgetOptions.fullScreen = true;
     }
 
-    onUpdateHelpshiftConfig();
+    window.Helpshift("updateHelpshiftConfig");
   };
 
   useEffect(() => {
@@ -140,13 +130,13 @@ function App() {
           <div className="mt-2 flex justify-between">
             <h4 className="text-lg py-2">Update config</h4>
             <div>
-              <button onClick={onUpdateHelpshiftConfig}>
+              <button onClick={() => window.Helpshift("updateHelpshiftConfig")}>
                 Update Helpshift Config
               </button>
             </div>
           </div>
           <div className="mt-2 flex justify-between">
-            <h4 className="text-lg py-2">Login with helpshift</h4>
+            <h4 className="text-lg py-2">Login user</h4>
             <div>
               {isLoggedIn ? (
                 <button onClick={onHandleLogout}>Logout</button>
@@ -167,7 +157,9 @@ function App() {
                     onChange={onHandleFullPrivacyChange}
                     className="form-radio h-5 w-5 text-blue-600"
                   ></input>
-                  <span className="ml-2 text-gray-700">Enable Full Privacy</span>
+                  <span className="ml-2 text-gray-700">
+                    Enable Full Privacy
+                  </span>
                 </label>
                 <label className="inline-flex items-center">
                   <input
@@ -177,7 +169,9 @@ function App() {
                     onChange={onHandleFullPrivacyChange}
                     className="form-radio h-5 w-5 text-blue-600"
                   ></input>
-                  <span className="ml-2 text-gray-700">Disable Full Privacy</span>
+                  <span className="ml-2 text-gray-700">
+                    Disable Full Privacy
+                  </span>
                 </label>
               </form>
             </div>
