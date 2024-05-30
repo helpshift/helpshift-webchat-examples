@@ -6,6 +6,15 @@ const WebChatOptions = () => {
 
   const [selectedPrivacyOption, setSelectedPrivacyOption] = useState("disable");
 
+
+  const [selectedLauncherOption, setSelectedLauncherOption] =
+    useState("showLauncher");
+
+    const [position, setPosition] = useState("bottom-right");
+
+    const [selectedFullScreenOption, setSelectedFullScreenOption] =
+    useState("exitFullScreen");
+
   const onLogin = () => {
     window.helpshiftConfig.userId = "captain_planet12";
     window.helpshiftConfig.userEmail = "captain@example.com";
@@ -28,6 +37,39 @@ const WebChatOptions = () => {
     } else {
       window.helpshiftConfig.fullPrivacy = false;
     }
+    window.Helpshift("updateHelpshiftConfig");
+  };
+
+  const onLauncherChange = (e) => {
+    const val = e.target.value;
+    if (val == "showLauncher") {
+      window.Helpshift("show");
+      setSelectedLauncherOption("showLauncher");
+    } else {
+      window.Helpshift("hide");
+      setSelectedLauncherOption("hideLauncher");
+    }
+  };
+
+  const onChangeWidgetPosition = (e) => {
+    const value = e.target.value;
+    setPosition(value);
+  };
+
+  const onWidgetPositionApply = () => {
+    window.helpshiftConfig.widgetOptions.position = position;
+    window.Helpshift("updateHelpshiftConfig");
+  };
+
+  const onFullScreenChange = (e) => {
+    const val = e.target.value;
+    setSelectedFullScreenOption(val);
+    if (val === "exitFullScreen") {
+      window.helpshiftConfig.widgetOptions.fullScreen = false;
+    } else {
+      window.helpshiftConfig.widgetOptions.fullScreen = true;
+    }
+
     window.Helpshift("updateHelpshiftConfig");
   };
 
@@ -88,7 +130,88 @@ const WebChatOptions = () => {
               </form>
             </div>
           </div>
+        </div>
+      </div>
 
+
+      <div className="w-full   border-gray-300 mt-12 rounded-lg">
+        <h3 className="py-2 pl-3 text-lg rounded-t-lg font-bold uppercase text-gray-800">
+          Widget options
+        </h3>
+        <div className="m-3">
+          <div className="mt-2 flex justify-between">
+            <h4 className="text-lg py-2">Launcher Options</h4>
+            <div className="lex flex-col space-y-2 p-2">
+              <form>
+                <label className="inline-flex items-center mr-4">
+                  <input
+                    type="radio"
+                    value={"showLauncher"}
+                    checked={selectedLauncherOption === "showLauncher"}
+                    onChange={onLauncherChange}
+                    className="form-radio h-5 w-5 text-blue-600"
+                  ></input>
+                  <span className="ml-2 text-gray-700">Show</span>
+                </label>
+                <label className="inline-flex items-center">
+                  <input
+                    type="radio"
+                    value={"hideLauncher"}
+                    checked={selectedLauncherOption === "hideLauncher"}
+                    onChange={onLauncherChange}
+                    className="form-radio h-5 w-5 text-blue-600"
+                  ></input>
+                  <span className="ml-2 text-gray-700">Hide</span>
+                </label>
+              </form>
+            </div>
+          </div>
+          <div className="mt-3 flex justify-between">
+            <h4 className="text-lg py-2">Select Position</h4>
+            <div>
+              <select
+                className=" appearance-none bg-white border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:border-gray-500"
+                value={position}
+                onChange={onChangeWidgetPosition}
+              >
+                <option value="bottom-right">bottom-right</option>
+                <option value="bottom-left">bottom-left</option>
+                <option value="top-left">top-left</option>
+                <option value="top-right">top-right</option>
+              </select>
+
+              <button className="ml-3" onClick={onWidgetPositionApply}>
+                Apply
+              </button>
+            </div>
+          </div>
+          <div className="mt-4 flex justify-between">
+            <h4 className="text-lg py-2">Full screen mode</h4>
+            <div className="lex flex-col space-y-2 p-2">
+              <form>
+                <label className="inline-flex items-center mr-4">
+                  <input
+                    type="radio"
+                    value={"enterFullScreen"}
+                    checked={selectedFullScreenOption === "enterFullScreen"}
+                    onChange={onFullScreenChange}
+                    className="form-radio h-5 w-5 text-blue-600"
+                  ></input>
+                  <span className="ml-2 text-gray-700">Enter</span>
+                </label>
+                <label className="inline-flex items-center">
+                  <input
+                    type="radio"
+                    value={"exitFullScreen"}
+                    checked={selectedFullScreenOption === "exitFullScreen"}
+                    onChange={onFullScreenChange}
+                    className="form-radio h-5 w-5 text-blue-600"
+                  ></input>
+                  <span className="ml-2 text-gray-700">Exit</span>
+                </label>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </>
