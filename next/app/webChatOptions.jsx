@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 const WebChatOptions = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -16,11 +16,16 @@ const WebChatOptions = () => {
 
   const [unreadMessageCount, setMessageUnreadCount] = useState(0);
 
+  const [message, setMessage] = useState("");
+  const [messageEventListenerIsAdded, setmessageEventListenerIsAdded] =
+  useState(false);
+
   const onLogin = () => {
     window.helpshiftConfig.userId = "captain_planet12";
     window.helpshiftConfig.userEmail = "captain@example.com";
     window.Helpshift("updateHelpshiftConfig");
     setIsLoggedIn(true);
+    setMessage("");
   };
 
   const onLogout = () => {
@@ -28,6 +33,7 @@ const WebChatOptions = () => {
     window.helpshiftConfig.userEmail = "";
     window.Helpshift("updateHelpshiftConfig");
     setIsLoggedIn(false);
+    setMessage("");
   };
 
   const onFullPrivacyChange = (e) => {
@@ -93,6 +99,25 @@ const WebChatOptions = () => {
       );
     };
   }, []);
+
+  const messageAddEventHandler = useCallback((data) => {
+    setMessage(data.body);
+  }, []);
+
+  const onAddMessageEventClick = () => {
+    window.Helpshift("addEventListener", "messageAdd", messageAddEventHandler);
+    setmessageEventListenerIsAdded(true);
+  };
+
+  const onRemoveMessageEventClick = () => {
+    window.Helpshift(
+      "removeEventListener",
+      "messageAdd",
+      messageAddEventHandler
+    );
+    setmessageEventListenerIsAdded(false);
+    setMessage("");
+  };
 
   return (
     <>
@@ -243,6 +268,23 @@ const WebChatOptions = () => {
           <div className="mt-4 flex justify-between">
             <h3 className="text-lg py-2">Unread Message Count</h3>
             <div className="mr-2 p-2">Count: {unreadMessageCount}</div>
+          </div>
+          <div className="mt-4 flex justify-between">
+            <h3 className="text-lg py-2">Message add event</h3>
+            <div>
+              {messageEventListenerIsAdded ? (
+                <button onClick={onRemoveMessageEventClick}>Remove</button>
+              ) : (
+                <button onClick={onAddMessageEventClick}>Add</button>
+              )}
+            </div>
+          </div>
+          <div>
+            {messageEventListenerIsAdded && (
+              <p>
+                Message added is : <b>{message}</b>
+              </p>
+            )}
           </div>
         </div>
       </div>
