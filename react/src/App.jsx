@@ -13,10 +13,9 @@ function App() {
     useState("showLauncher");
 
   const [unreadMessageCount, setMessageUnreadCount] = useState(0);
-  useState(false);
 
   const [message, setMessage] = useState("");
-  const [messageEventListenerIsAdded, setmessageEventListenerIsAdded] =
+  const [messageEventListenerIsAdded, setMessageEventListenerIsAdded] =
     useState(false);
 
   const onFullPrivacyChange = (e) => {
@@ -105,7 +104,7 @@ function App() {
 
   const onAddMessageEventClick = () => {
     window.Helpshift("addEventListener", "messageAdd", messageAddEventHandler);
-    setmessageEventListenerIsAdded(true);
+    setMessageEventListenerIsAdded(true);
   };
 
   const onRemoveMessageEventClick = () => {
@@ -114,7 +113,7 @@ function App() {
       "messageAdd",
       messageAddEventHandler
     );
-    setmessageEventListenerIsAdded(false);
+    setMessageEventListenerIsAdded(false);
     setMessage("");
   };
 
