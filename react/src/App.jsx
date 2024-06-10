@@ -22,10 +22,13 @@ function App() {
     const val = e.target.value;
     setSelectedPrivacyOption(val);
     if (val === "enable") {
+      // @NOTE: You can update the data in config object using the below code.
       window.helpshiftConfig.fullPrivacy = true;
     } else {
       window.helpshiftConfig.fullPrivacy = false;
     }
+    // @NOTE: If you want to update the helpshiftConfig object after your web page
+    //  has loaded, you can do it by calling the following API.
     window.Helpshift("updateHelpshiftConfig");
   };
 
@@ -48,9 +51,11 @@ function App() {
   const onLauncherChange = (e) => {
     const val = e.target.value;
     if (val == "showLauncher") {
+      // @NOTE: You can show Web Chat completely by calling the following API.
       window.Helpshift("show");
       setSelectedLauncherOption("showLauncher");
     } else {
+      // @NOTE: You can hide Web Chat completely by calling the following API.
       window.Helpshift("hide");
       setSelectedLauncherOption("hideLauncher");
     }
@@ -78,7 +83,11 @@ function App() {
     window.Helpshift("updateHelpshiftConfig");
   };
 
+  // @NOTE: In order to add an event to the window, you should add it
+  // when the component mounts using the useEffect hook
+  // and remove it when the component unmounts.
   useEffect(() => {
+    // @NOTE: In order to add New Unread Messages event handler, add the following code.
     const newUnreadMessagesEventHandler = function (data) {
       setMessageUnreadCount(data.unreadCount);
     };
@@ -89,6 +98,7 @@ function App() {
       newUnreadMessagesEventHandler
     );
 
+    // @NOTE: In order to remove New Unread Messages event handler, add the following code.
     return () => {
       window.Helpshift(
         "removeEventListener",
@@ -98,6 +108,16 @@ function App() {
     };
   }, []);
 
+  // @NOTE: We do not recommend adding events dynamically (on button clicks)
+  // because they will be reattached every time the component re-renders and can potentially lead to memory leaks.
+  // Instead, we prefer to add them
+  // when the component mounts, and remove them when the component unmounts
+
+  // However, if you still want to start listening to events on some action, then this is the right way
+  // You can do so by using use callback hook.
+
+  // @NOTE: To add Message Add event handler, add the following code.
+  // This event is triggered when the user adds a message to a conversation.
   const messageAddEventHandler = useCallback((data) => {
     setMessage(data.body);
   }, []);
@@ -107,6 +127,7 @@ function App() {
     setMessageEventListenerIsAdded(true);
   };
 
+  // @NOTE: In order to remove Message Add event handler, add the following code.
   const onRemoveMessageEventClick = () => {
     window.Helpshift(
       "removeEventListener",

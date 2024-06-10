@@ -11,15 +11,19 @@
     <script type="module" src="/src/main.jsx"></script>
     <script>
       (function () {
+        // @NOTE: In order to load Web Chat, you have to set the PLATFORM_ID and DOMAIN in the script.
+        // https://developers.helpshift.com/web-chat/getting-started/#manual-embed
         var PLATFORM_ID = "%VITE_REACT_APP_PLATFORM_ID%",
           DOMAIN = "%VITE_REACT_APP_DOMAIN%",
           LANGUAGE = "en";
+
+        /* Do not modify the code below */
 
         window.helpshiftConfig = {
           platformId: PLATFORM_ID,
           domain: DOMAIN,
           language: LANGUAGE,
-          widgetOptions:{},
+          widgetOptions: {},
         };
       })();
 
@@ -45,6 +49,8 @@
             a.parentNode.insertBefore(i, a);
         } else window.Helpshift("update");
       })(document, "hs-chat");
+
+      /* Do not modify the code above */
     </script>
   </body>
 </html>
