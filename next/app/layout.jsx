@@ -16,9 +16,14 @@ export default function RootLayout({ children }) {
         <Script id="show-banner">
           {`
             (function () {
+              //  @NOTE: In order to load Web Chat, you have to set the PLATFORM_ID and DOMAIN in the script.
+              // https://developers.helpshift.com/web-chat/getting-started/#manual-embed
+
               var PLATFORM_ID = "${process.env.NEXT_PUBLIC_PLATFORM_ID}",
                 DOMAIN = "${process.env.NEXT_PUBLIC_DOMAIN}",
                 LANGUAGE = "en";
+
+              // Do not modify the code below
 
               window.helpshiftConfig = {
                 platformId: PLATFORM_ID,
@@ -51,6 +56,7 @@ export default function RootLayout({ children }) {
               } else window.Helpshift("update");
             })(document, "hs-chat");
           `}
+          {/* Do not modify the code above */}
         </Script>
         {children}
       </body>

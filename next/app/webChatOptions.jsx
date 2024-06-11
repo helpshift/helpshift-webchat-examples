@@ -1,3 +1,6 @@
+// @NOTE: To use client components we have to use "use client" directive at top of file,
+//  above the imports as shown below.
+
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
 
@@ -18,11 +21,15 @@ const WebChatOptions = () => {
 
   const [message, setMessage] = useState("");
   const [messageEventListenerIsAdded, setmessageEventListenerIsAdded] =
-  useState(false);
+    useState(false);
 
   const onLogin = () => {
+    // @NOTE: You can update the data in config object using the below code.
     window.helpshiftConfig.userId = "captain_planet12";
     window.helpshiftConfig.userEmail = "captain@example.com";
+
+    // @NOTE: If you want to update the helpshiftConfig object after your web page
+    //  has loaded, you can do it by calling the following API.
     window.Helpshift("updateHelpshiftConfig");
     setIsLoggedIn(true);
     setMessage("");
@@ -50,9 +57,11 @@ const WebChatOptions = () => {
   const onLauncherChange = (e) => {
     const val = e.target.value;
     if (val == "showLauncher") {
+      // @NOTE: You can show Web Chat completely by calling the following API.
       window.Helpshift("show");
       setSelectedLauncherOption("showLauncher");
     } else {
+      // @NOTE: You can hide Web Chat completely by calling the following API.
       window.Helpshift("hide");
       setSelectedLauncherOption("hideLauncher");
     }
@@ -80,7 +89,11 @@ const WebChatOptions = () => {
     window.Helpshift("updateHelpshiftConfig");
   };
 
+  // @NOTE: In order to add an event to the window, you should add it
+  // when the component mounts using the useEffect hook
+  // and remove it when the component unmounts.
   useEffect(() => {
+    // @NOTE: In order to add New Unread Messages event handler, add the following code.
     const newUnreadMessagesEventHandler = function (data) {
       setMessageUnreadCount(data.unreadCount);
     };
@@ -91,6 +104,7 @@ const WebChatOptions = () => {
       newUnreadMessagesEventHandler
     );
 
+    // @NOTE: In order to remove New Unread Messages event handler, add the following code.
     return () => {
       window.Helpshift(
         "removeEventListener",
@@ -99,6 +113,17 @@ const WebChatOptions = () => {
       );
     };
   }, []);
+
+  // @NOTE: We do not recommend adding events dynamically (on button clicks)
+  // because they will be reattached every time the component re-renders and can potentially lead to memory leaks.
+  // Instead, we prefer to add them
+  // when the component mounts, and remove them when the component unmounts
+
+  // However, if you still want to start listening to events on some action, then this is the right way
+  // You can do so by using use callback hook.
+
+  // @NOTE: To add Message Add event handler, add the following code.
+  // This event is triggered when the user adds a message to a conversation.
 
   const messageAddEventHandler = useCallback((data) => {
     setMessage(data.body);
@@ -109,6 +134,7 @@ const WebChatOptions = () => {
     setmessageEventListenerIsAdded(true);
   };
 
+  // @NOTE: In order to remove Message Add event handler, add the following code.
   const onRemoveMessageEventClick = () => {
     window.Helpshift(
       "removeEventListener",
