@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { environment } from '../environments/environment.development';
 
 declare const Helpshift: any;
+declare const helpshiftConfig: any;
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,10 @@ declare const Helpshift: any;
 })
 export class AppComponent {
   title = 'Web Chat';
+
   constructor(private renderer: Renderer2) {}
+
+  isLoggedIn: boolean = false;
 
   ngOnInit() {
     this.loadScript();
@@ -61,5 +65,21 @@ export class AppComponent {
 
   updateHelpshiftConfig() {
     Helpshift('updateHelpshiftConfig');
+  }
+
+  onLogin() {
+    helpshiftConfig.userId = 'captain_planet12';
+    helpshiftConfig.userEmail = 'captain@example.com';
+
+    Helpshift('updateHelpshiftConfig');
+    this.isLoggedIn = true;
+  }
+
+  onLogout() {
+    helpshiftConfig.userId = '';
+    helpshiftConfig.userEmail = '';
+
+    Helpshift('updateHelpshiftConfig');
+    this.isLoggedIn = false;
   }
 }

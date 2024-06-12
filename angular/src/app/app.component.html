@@ -16,6 +16,16 @@
           </button>
         </div>
       </div>
+      <div class="mt-2 flex justify-between">
+        <h4 class="text-lg py-2">Login user</h4>
+        <div>
+          @if(isLoggedIn){
+          <button (click)="onLogout()">Logout</button>
+          }@else{
+          <button (click)="onLogin()">Login</button>
+          }
+        </div>
+      </div>
     </div>
   </div>
 
