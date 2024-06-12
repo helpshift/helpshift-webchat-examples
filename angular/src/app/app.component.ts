@@ -23,6 +23,9 @@ export class AppComponent {
   position: string = 'bottom-right';
   selectedFullScreenOption: string = 'exitFullScreen';
   unreadMessageCount: any = 0;
+  messageEventListenerIsAdded: boolean = false;
+  message: string = '';
+  messageAddEventHandlerReference: any;
 
   newUnreadMessagesEventHandler: any;
 
@@ -99,6 +102,7 @@ export class AppComponent {
 
     Helpshift('updateHelpshiftConfig');
     this.isLoggedIn = true;
+    this.message = '';
   }
 
   onLogout() {
@@ -107,6 +111,7 @@ export class AppComponent {
 
     Helpshift('updateHelpshiftConfig');
     this.isLoggedIn = false;
+    this.message = '';
   }
 
   onFullPrivacyChange(event: any) {
@@ -151,5 +156,30 @@ export class AppComponent {
       helpshiftConfig.widgetOptions.fullScreen = false;
     }
     Helpshift('updateHelpshiftConfig');
+  }
+
+  onRemoveMessageEventClick() {
+    this.messageEventListenerIsAdded = false;
+    Helpshift(
+      'removeEventListener',
+      'messageAdd',
+      this.messageAddEventHandlerReference
+    );
+  }
+
+  onAddMessageEventClick() {
+    this.messageEventListenerIsAdded = true;
+    this.messageAddEventHandlerReference =
+      this.messageAddEventHandler.bind(this);
+    Helpshift(
+      'addEventListener',
+      'messageAdd',
+      this.messageAddEventHandlerReference
+    );
+  }
+  messageAddEventHandler(data: any) {
+    this.ngZone.run(() => {
+      this.message = data.body;
+    });
   }
 }
