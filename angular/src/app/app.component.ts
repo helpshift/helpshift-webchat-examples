@@ -1,4 +1,4 @@
-import { Component, Renderer2 } from '@angular/core';
+import { Component, Renderer2, NgZone } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { environment } from '../environments/environment.development';
 
@@ -15,16 +15,37 @@ declare const helpshiftConfig: any;
 export class AppComponent {
   title = 'Web Chat';
 
-  constructor(private renderer: Renderer2) {}
+  constructor(private renderer: Renderer2, private ngZone: NgZone) {}
 
   isLoggedIn: boolean = false;
   selectedPrivacyOption: string = 'disable';
   selectedLauncherOption: string = 'showLauncher';
   position: string = 'bottom-right';
   selectedFullScreenOption: string = 'exitFullScreen';
+  unreadMessageCount: any = 0;
+
+  newUnreadMessagesEventHandler: any;
 
   ngOnInit() {
     this.loadScript();
+    this.newUnreadMessagesEventHandler = (data: any) => {
+      this.ngZone.run(() => {
+        this.unreadMessageCount = data.unreadCount;
+      });
+    };
+    Helpshift(
+      'addEventListener',
+      'newUnreadMessages',
+      this.newUnreadMessagesEventHandler
+    );
+  }
+
+  ngOnDestroy() {
+    Helpshift(
+      'removeEventListener',
+      'newUnreadMessages',
+      this.newUnreadMessagesEventHandler
+    );
   }
 
   private loadScript() {
