@@ -19,6 +19,9 @@ export class AppComponent {
 
   isLoggedIn: boolean = false;
   selectedPrivacyOption: string = 'disable';
+  selectedLauncherOption: string = 'showLauncher';
+  position: string = 'bottom-right';
+  selectedFullScreenOption: string = 'exitFullScreen';
 
   ngOnInit() {
     this.loadScript();
@@ -36,6 +39,7 @@ export class AppComponent {
         platformId: PLATFORM_ID,
         domain: DOMAIN,
         language: LANGUAGE,
+        widgetOptions:{},
       };
     })();
     !(function (t, e) {
@@ -92,6 +96,38 @@ export class AppComponent {
     } else {
       this.selectedPrivacyOption = 'disable';
       helpshiftConfig.fullPrivacy = false;
+    }
+    Helpshift('updateHelpshiftConfig');
+  }
+
+  onLauncherChange(event: any) {
+    const val = event.target.value;
+    if (val === 'showLauncher') {
+      this.selectedLauncherOption = 'showLauncher';
+      Helpshift('show');
+    } else {
+      this.selectedLauncherOption = 'hideLauncher';
+      Helpshift('hide');
+    }
+  }
+
+  onChangeWidgetPosition(event: any) {
+    const val = event.target.value;
+    this.position = val;
+  }
+
+  onWidgetPositionApply() {
+    helpshiftConfig.widgetOptions.position = this.position;
+    Helpshift('updateHelpshiftConfig');
+  }
+
+  onFullScreenChange(event: any) {
+    const val = event.target.value;
+    this.selectedFullScreenOption = val;
+    if (val === 'enterFullScreen') {
+      helpshiftConfig.widgetOptions.fullScreen = true;
+    } else {
+      helpshiftConfig.widgetOptions.fullScreen = false;
     }
     Helpshift('updateHelpshiftConfig');
   }
