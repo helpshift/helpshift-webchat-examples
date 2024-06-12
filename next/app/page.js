@@ -5,9 +5,9 @@ export default function Home() {
     <main className="max-w-3xl mt-5">
       <h1 className="text-5xl text-center">Web Chat</h1>
 
-      {/* @NOTE: By default it is a server component,
-        but to write interactive UI we have to use client component,
-        as we have used below <WebChatOptions>
+      {/* @NOTE: By default, component are rendered server-side,
+        but to write interactive UI we need to use client components,
+        the way we have used below in <WebChatOptions>
 
         Client Components can use state, effects, and event listeners, meaning they can provide
         immediate feedback to the user and update the UI.

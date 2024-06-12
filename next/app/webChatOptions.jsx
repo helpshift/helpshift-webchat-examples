@@ -92,6 +92,9 @@ const WebChatOptions = () => {
   // @NOTE: In order to add an event to the window, you should add it
   // when the component mounts using the useEffect hook
   // and remove it when the component unmounts.
+
+  // @NOTE: Do not call window.Helpshift("updateHelpshiftConfig") inside useEffect.
+  //  This may lead to unknown side effects.
   useEffect(() => {
     // @NOTE: In order to add New Unread Messages event handler, add the following code.
     const newUnreadMessagesEventHandler = function (data) {
@@ -173,9 +176,9 @@ const WebChatOptions = () => {
           </div>
           <div className="mt-2 flex justify-between">
             <h4 className="text-lg py-2">Full privacy</h4>
-            <div className="lex flex-col space-y-2 p-2">
+            <div className="flex flex-col space-y-2 p-2">
               <form>
-                <label className="inline-flex items-center mr-4">
+                <div className="inline-flex items-center mr-4">
                   <input
                     type="radio"
                     value={"enable"}
@@ -186,8 +189,8 @@ const WebChatOptions = () => {
                   <span className="ml-2 text-gray-700">
                     Enable Full Privacy
                   </span>
-                </label>
-                <label className="inline-flex items-center">
+                </div>
+                <div className="inline-flex items-center">
                   <input
                     type="radio"
                     value={"disable"}
@@ -198,23 +201,23 @@ const WebChatOptions = () => {
                   <span className="ml-2 text-gray-700">
                     Disable Full Privacy
                   </span>
-                </label>
+                </div>
               </form>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="w-full   border-gray-300 mt-12 rounded-lg">
+      <div className="w-full border-gray-300 mt-12 rounded-lg">
         <h3 className="py-2 pl-3 text-lg rounded-t-lg font-bold uppercase text-gray-800">
           Widget options
         </h3>
         <div className="m-3">
           <div className="mt-2 flex justify-between">
             <h4 className="text-lg py-2">Launcher Options</h4>
-            <div className="lex flex-col space-y-2 p-2">
+            <div className="flex flex-col space-y-2 p-2">
               <form>
-                <label className="inline-flex items-center mr-4">
+                <div className="inline-flex items-center mr-4">
                   <input
                     type="radio"
                     value={"showLauncher"}
@@ -223,8 +226,8 @@ const WebChatOptions = () => {
                     className="form-radio h-5 w-5 text-blue-600"
                   ></input>
                   <span className="ml-2 text-gray-700">Show</span>
-                </label>
-                <label className="inline-flex items-center">
+                </div>
+                <div className="inline-flex items-center">
                   <input
                     type="radio"
                     value={"hideLauncher"}
@@ -233,7 +236,7 @@ const WebChatOptions = () => {
                     className="form-radio h-5 w-5 text-blue-600"
                   ></input>
                   <span className="ml-2 text-gray-700">Hide</span>
-                </label>
+                </div>
               </form>
             </div>
           </div>
@@ -258,9 +261,9 @@ const WebChatOptions = () => {
           </div>
           <div className="mt-4 flex justify-between">
             <h4 className="text-lg py-2">Full screen mode</h4>
-            <div className="lex flex-col space-y-2 p-2">
+            <div className="flex flex-col space-y-2 p-2">
               <form>
-                <label className="inline-flex items-center mr-4">
+                <div className="inline-flex items-center mr-4">
                   <input
                     type="radio"
                     value={"enterFullScreen"}
@@ -269,8 +272,8 @@ const WebChatOptions = () => {
                     className="form-radio h-5 w-5 text-blue-600"
                   ></input>
                   <span className="ml-2 text-gray-700">Enter</span>
-                </label>
-                <label className="inline-flex items-center">
+                </div>
+                <div className="inline-flex items-center">
                   <input
                     type="radio"
                     value={"exitFullScreen"}
@@ -279,14 +282,14 @@ const WebChatOptions = () => {
                     className="form-radio h-5 w-5 text-blue-600"
                   ></input>
                   <span className="ml-2 text-gray-700">Exit</span>
-                </label>
+                </div>
               </form>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="w-full   border-gray-300 mt-12 rounded-lg">
+      <div className="w-full border-gray-300 mt-12 rounded-lg">
         <h3 className="py-2 pl-3 text-lg rounded-t-lg font-bold uppercase text-gray-800">
           Event handlers
         </h3>
