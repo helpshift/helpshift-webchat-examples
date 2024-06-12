@@ -1,13 +1,15 @@
-import { Component ,Renderer2} from '@angular/core';
+import { Component, Renderer2 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { environment } from '../environments/environment.development';
+
+declare const Helpshift: any;
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
 })
 export class AppComponent {
   title = 'Web Chat';
@@ -55,5 +57,9 @@ export class AppComponent {
     })(document, "hs-chat");
     `;
     this.renderer.appendChild(document.body, script);
+  }
+
+  updateHelpshiftConfig() {
+    Helpshift('updateHelpshiftConfig');
   }
 }
