@@ -18,6 +18,7 @@ export class AppComponent {
   constructor(private renderer: Renderer2) {}
 
   isLoggedIn: boolean = false;
+  selectedPrivacyOption: string = 'disable';
 
   ngOnInit() {
     this.loadScript();
@@ -81,5 +82,17 @@ export class AppComponent {
 
     Helpshift('updateHelpshiftConfig');
     this.isLoggedIn = false;
+  }
+
+  onFullPrivacyChange(event: any) {
+    let val = event.target.value;
+    if (val === 'enable') {
+      this.selectedPrivacyOption = 'enable';
+      helpshiftConfig.fullPrivacy = true;
+    } else {
+      this.selectedPrivacyOption = 'disable';
+      helpshiftConfig.fullPrivacy = false;
+    }
+    Helpshift('updateHelpshiftConfig');
   }
 }
