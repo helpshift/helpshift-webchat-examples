@@ -16,6 +16,7 @@ export default function RootLayout({ children }) {
         <Script id="show-banner">
           {`
             (function () {
+
               //  @NOTE: In order to load Web Chat, you have to set the PLATFORM_ID and DOMAIN in the script.
               // https://developers.helpshift.com/web-chat/getting-started/#manual-embed
 
@@ -24,6 +25,10 @@ export default function RootLayout({ children }) {
                 LANGUAGE = "en";
 
               // Do not modify the code below
+
+              // @NOTE: It's a good idea to set all widget options and information here.
+              // However, in the case where some information needs to be added later (async),
+              // use the updateHelpshiftConfig API https://developers.helpshift.com/web-chat/api/
 
               window.helpshiftConfig = {
                 platformId: PLATFORM_ID,
