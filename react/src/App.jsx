@@ -140,7 +140,22 @@ function App() {
 
   return (
     <div className="max-w-3xl">
-      <h1 className="text-5xl text-center">Web Chat</h1>
+      <h1 className="text-5xl pl-3">Web Chat</h1>
+      <div className="bg-blue-100 border-l-4 border-blue-500 text-blue-800 p-2 my-4 rounded">
+        <p>
+          This page is created purely for demo purposes and does not contain all
+          the Web Chat APIs, options, or events. Please check the
+          <a
+            href="https://developers.helpshift.com/web-chat/"
+            className="text-blue-500 "
+            target="_blank"
+          >
+            {" "}
+            Developer documentation{" "}
+          </a>
+          for the complete details.
+        </p>
+      </div>
 
       <div className="w-full border-gray-300 mt-12 rounded-lg">
         <h3 className="py-2 pl-3 text-lg rounded-t-lg font-bold uppercase text-gray-800">
