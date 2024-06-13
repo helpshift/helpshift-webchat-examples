@@ -29,8 +29,14 @@ export class AppComponent {
 
   newUnreadMessagesEventHandler: any;
 
+  // @NOTE: In order to add an event to the window, you should add it
+  // when the component mounts using ngOnInit()
+  // and remove it when the component unmounts using ngOnDestroy();
+
   ngOnInit() {
     this.loadScript();
+
+    // @NOTE: In order to add New Unread Messages event handler, add the following code.
     this.newUnreadMessagesEventHandler = (data: any) => {
       this.ngZone.run(() => {
         this.unreadMessageCount = data.unreadCount;
@@ -43,6 +49,7 @@ export class AppComponent {
     );
   }
 
+  // @NOTE: In order to remove New Unread Messages event handler, add the following code.
   ngOnDestroy() {
     Helpshift(
       'removeEventListener',
@@ -56,9 +63,20 @@ export class AppComponent {
     script.type = 'text/javascript';
     script.text = `
     (function () {
+
+      //  @NOTE: In order to load Web Chat, you have to set the PLATFORM_ID and DOMAIN in the script.
+      // https://developers.helpshift.com/web-chat/getting-started/#manual-embed
+
       var PLATFORM_ID = "${environment.PLATFORM_ID}",
         DOMAIN = "${environment.DOMAIN}",
         LANGUAGE = "en";
+
+        // Do not modify the code below
+
+        // @NOTE: It's a good idea to set all widget options and information here.
+        // However, in the case where some information needs to be added later (async),
+        // use the updateHelpshiftConfig API https://developers.helpshift.com/web-chat/api/
+
       window.helpshiftConfig = {
         platformId: PLATFORM_ID,
         domain: DOMAIN,
@@ -88,15 +106,21 @@ export class AppComponent {
           a.parentNode.insertBefore(i, a);
       } else window.Helpshift("update");
     })(document, "hs-chat");
+
+    // Do not modify the code above
+
     `;
     this.renderer.appendChild(document.body, script);
   }
 
   updateHelpshiftConfig() {
+    // @NOTE: If you want to update the helpshiftConfig object after your web page
+    //  has loaded, you can do it by calling the following API.
     Helpshift('updateHelpshiftConfig');
   }
 
   onLogin() {
+    // @NOTE: You can update the data in config object using the below code.
     helpshiftConfig.userId = 'captain_planet12';
     helpshiftConfig.userEmail = 'captain@example.com';
 
@@ -130,9 +154,11 @@ export class AppComponent {
     const val = event.target.value;
     if (val === 'showLauncher') {
       this.selectedLauncherOption = 'showLauncher';
+      // @NOTE: You can show Web Chat completely by calling the following API.
       Helpshift('show');
     } else {
       this.selectedLauncherOption = 'hideLauncher';
+      // @NOTE: You can hide Web Chat completely by calling the following API.
       Helpshift('hide');
     }
   }
@@ -158,14 +184,18 @@ export class AppComponent {
     Helpshift('updateHelpshiftConfig');
   }
 
-  onRemoveMessageEventClick() {
-    this.messageEventListenerIsAdded = false;
-    Helpshift(
-      'removeEventListener',
-      'messageAdd',
-      this.messageAddEventHandlerReference
-    );
-  }
+  // @NOTE: We do not recommend adding events dynamically (on button clicks)
+  // because they will be reattached every time the component re-renders and can potentially lead to memory leaks.
+  // Instead, we prefer to add them
+  // when the component mounts, and remove them when the component unmounts
+
+  // However, if you still want to start listening to events on some action, then this is the right way
+  // You can do so by creating a reference of messageAddEventHandler function while adding the event
+  // and binding it to current context (this) and store it in some reference variable(messageAddEventHandlerReference)
+  // and when you want to call the handler you can call this reference variable (messageAddEventHandlerReference).
+
+  // @NOTE: To add Message Add event handler, add the following code.
+  // This event is triggered when the user adds a message to a conversation.
 
   onAddMessageEventClick() {
     this.messageEventListenerIsAdded = true;
@@ -177,6 +207,17 @@ export class AppComponent {
       this.messageAddEventHandlerReference
     );
   }
+
+  // @NOTE: In order to remove Message Add event handler, add the following code.
+  onRemoveMessageEventClick() {
+    this.messageEventListenerIsAdded = false;
+    Helpshift(
+      'removeEventListener',
+      'messageAdd',
+      this.messageAddEventHandlerReference
+    );
+  }
+
   messageAddEventHandler(data: any) {
     this.ngZone.run(() => {
       this.message = data.body;
