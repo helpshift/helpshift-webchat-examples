@@ -1,0 +1,3 @@
+<template>
+  Web Chat
+</template>
