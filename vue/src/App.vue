@@ -46,6 +46,11 @@ onMounted(() => {
 });
 
 let isLoggedIn = ref(false);
+let selectedPrivacyOption = ref("disable");
+
+const updateHelpshiftConfig = () => {
+  Helpshift("updateHelpshiftConfig");
+};
 
 const onLogin = () => {
   isLoggedIn.value = true;
@@ -61,7 +66,14 @@ const onLogout = () => {
   Helpshift("updateHelpshiftConfig");
 };
 
-const updateHelpshiftConfig = () => {
+const onFullPrivacyChange = (event) => {
+  const val = event.target.value;
+  selectedPrivacyOption.value = val;
+  if (val === "enable") {
+    helpshiftConfig.fullPrivacy = true;
+  } else {
+    helpshiftConfig.fullPrivacy = false;
+  }
   Helpshift("updateHelpshiftConfig");
 };
 </script>
@@ -106,6 +118,33 @@ const updateHelpshiftConfig = () => {
           <div>
             <button v-if="isLoggedIn" @click="onLogout">Logout</button>
             <button v-else @click="onLogin">Login</button>
+          </div>
+        </div>
+        <div class="mt-2 flex justify-between">
+          <h2 class="text-lg py-2">Full privacy</h2>
+          <div class="flex flex-col space-y-2 p-2">
+            <form>
+              <div class="inline-flex items-center mr-4">
+                <input
+                  type="radio"
+                  value="enable"
+                  @change="onFullPrivacyChange"
+                  v-model="selectedPrivacyOption"
+                  class="form-radio h-5 w-5 text-blue-600"
+                />
+                <span class="ml-2 text-gray-700">Enable Full Privacy</span>
+              </div>
+              <div class="inline-flex items-center">
+                <input
+                  type="radio"
+                  value="disable"
+                  @change="onFullPrivacyChange"
+                  v-model="selectedPrivacyOption"
+                  class="form-radio h-5 w-5 text-blue-600"
+                />
+                <span class="ml-2 text-gray-700">Disable Full Privacy</span>
+              </div>
+            </form>
           </div>
         </div>
       </div>
