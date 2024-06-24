@@ -1,7 +1,4 @@
-<template>Web Chat</template>
-
 <script setup>
-
 import { onMounted } from "vue";
 
 onMounted(() => {
@@ -47,4 +44,48 @@ onMounted(() => {
   `;
   document.body.appendChild(script);
 });
+
+const updateHelpshiftConfig = () => {
+  Helpshift("updateHelpshiftConfig");
+};
 </script>
+
+<template>
+  <main class="max-w-3xl mt-5">
+    <h1 class="text-5xl pl-3">Web Chat</h1>
+    <div
+      class="bg-blue-100 border-l-4 border-blue-500 text-blue-800 p-2 my-4 rounded"
+    >
+      <p>
+        This page is created purely for demo purposes and does not contain all
+        the Web Chat APIs, options, or events. Please check the
+        <a
+          href="https://developers.helpshift.com/web-chat/"
+          class="text-blue-500"
+          target="_blank"
+        >
+          Developer documentation
+        </a>
+        for the complete details.
+      </p>
+    </div>
+
+    <div class="w-full border-gray-300 mt-12 rounded-lg">
+      <h3
+        class="py-2 pl-3 text-lg rounded-t-lg font-bold uppercase text-gray-800"
+      >
+        Quick setup
+      </h3>
+      <div class="m-3">
+        <div class="mt-2 flex justify-between">
+          <h4 class="text-lg py-2">Update config</h4>
+          <div>
+            <button @click="updateHelpshiftConfig">
+              Update Helpshift Config
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</template>
