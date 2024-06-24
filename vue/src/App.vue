@@ -69,7 +69,8 @@ let selectedPrivacyOption = ref("disable");
 let selectedLauncherOption = ref("showLauncher");
 let position = ref("bottom-right");
 let selectedFullScreenOption = ref("exitFullScreen");
-
+let messageEventListenerIsAdded = ref(false);
+let message = ref("");
 
 const updateHelpshiftConfig = () => {
   Helpshift("updateHelpshiftConfig");
@@ -80,6 +81,7 @@ const onLogin = () => {
   helpshiftConfig.userId = "captain_planet12";
   helpshiftConfig.userEmail = "captain@example.com";
   Helpshift("updateHelpshiftConfig");
+  message.value = "";
 };
 
 const onLogout = () => {
@@ -87,6 +89,7 @@ const onLogout = () => {
   helpshiftConfig.userId = "";
   helpshiftConfig.userEmail = "";
   Helpshift("updateHelpshiftConfig");
+  message.value = "";
 };
 
 const onFullPrivacyChange = (event) => {
@@ -125,6 +128,20 @@ const onFullScreenChange = (event) => {
   }
 
   Helpshift("updateHelpshiftConfig");
+};
+
+var messageAddEventHandler = function (data) {
+  message.value = data.body;
+};
+
+const onAddMessageEventClick = () => {
+  messageEventListenerIsAdded.value = true;
+  Helpshift("addEventListener", "messageAdd", messageAddEventHandler);
+};
+
+const onRemoveMessageEventClick = () => {
+  messageEventListenerIsAdded.value = false;
+  Helpshift("removeEventListener", "messageAdd", messageAddEventHandler);
 };
 </script>
 
@@ -289,6 +306,23 @@ const onFullScreenChange = (event) => {
         <div className="mt-4 flex justify-between">
           <h3 className="text-lg py-2">Unread Message Count</h3>
           <div className="mr-2 p-2">Count: {{ unreadMessageCount }}</div>
+        </div>
+        <div className="mt-4 flex justify-between">
+          <h3 className="text-lg py-2">Message add event</h3>
+          <div>
+            <button
+              v-if="messageEventListenerIsAdded"
+              @click="onRemoveMessageEventClick"
+            >
+              Remove
+            </button>
+            <button v-else @click="onAddMessageEventClick">Add</button>
+          </div>
+        </div>
+        <div v-if="messageEventListenerIsAdded">
+          <p>
+            Message added is : <b>{{ message }}</b>
+          </p>
         </div>
       </div>
     </div>
