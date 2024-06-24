@@ -47,6 +47,9 @@ onMounted(() => {
 
 let isLoggedIn = ref(false);
 let selectedPrivacyOption = ref("disable");
+let selectedLauncherOption = ref("showLauncher");
+let position = ref("bottom-right");
+let selectedFullScreenOption = ref("exitFullScreen");
 
 const updateHelpshiftConfig = () => {
   Helpshift("updateHelpshiftConfig");
@@ -74,6 +77,33 @@ const onFullPrivacyChange = (event) => {
   } else {
     helpshiftConfig.fullPrivacy = false;
   }
+  Helpshift("updateHelpshiftConfig");
+};
+
+const onLauncherChange = (event) => {
+  const val = event.target.value;
+  selectedLauncherOption.value = val;
+  if (val === "showLauncher") {
+    Helpshift("show");
+  } else {
+    Helpshift("hide");
+  }
+};
+
+const onWidgetPositionApply = () => {
+  helpshiftConfig.widgetOptions.position = position.value;
+  Helpshift("updateHelpshiftConfig");
+};
+
+const onFullScreenChange = (event) => {
+  const val = event.target.value;
+  selectedFullScreenOption.value = val;
+  if (val === "exitFullScreen") {
+    helpshiftConfig.widgetOptions.fullScreen = false;
+  } else {
+    helpshiftConfig.widgetOptions.fullScreen = true;
+  }
+
   Helpshift("updateHelpshiftConfig");
 };
 </script>
@@ -143,6 +173,85 @@ const onFullPrivacyChange = (event) => {
                   class="form-radio h-5 w-5 text-blue-600"
                 />
                 <span class="ml-2 text-gray-700">Disable Full Privacy</span>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-full border-gray-300 mt-12 rounded-lg">
+      <h3
+        class="py-2 pl-3 text-lg rounded-t-lg font-bold uppercase text-gray-800"
+      >
+        Widget options
+      </h3>
+      <div class="m-3">
+        <div class="mt-2 flex justify-between">
+          <h2 class="text-lg py-2">Launcher Options</h2>
+          <div class="flex flex-col space-y-2 p-2">
+            <form>
+              <div class="inline-flex items-center mr-4">
+                <input
+                  type="radio"
+                  value="showLauncher"
+                  @change="onLauncherChange"
+                  v-model="selectedLauncherOption"
+                  class="form-radio h-5 w-5 text-blue-600"
+                />
+                <span class="ml-2 text-gray-700">Show</span>
+              </div>
+              <div class="inline-flex items-center">
+                <input
+                  type="radio"
+                  value="hideLauncher"
+                  @change="onLauncherChange"
+                  v-model="selectedLauncherOption"
+                  class="form-radio h-5 w-5 text-blue-600"
+                />
+                <span class="ml-2 text-gray-700">Hide</span>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="mt-3 flex justify-between">
+          <h4 class="text-lg py-2">Position</h4>
+          <div>
+            <select
+              v-model="position"
+              class="appearance-none bg-white border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:border-gray-500"
+            >
+              <option value="bottom-right">bottom-right</option>
+              <option value="bottom-left">bottom-left</option>
+              <option value="top-left">top-left</option>
+              <option value="top-right">top-right</option>
+            </select>
+            <button class="ml-3" @click="onWidgetPositionApply">Apply</button>
+          </div>
+        </div>
+        <div class="mt-2 flex justify-between">
+          <h2 class="text-lg py-2">Full screen mode</h2>
+          <div class="flex flex-col space-y-2 p-2">
+            <form>
+              <div class="inline-flex items-center mr-4">
+                <input
+                  type="radio"
+                  value="enterFullScreen"
+                  @change="onFullScreenChange"
+                  v-model="selectedFullScreenOption"
+                  class="form-radio h-5 w-5 text-blue-600"
+                />
+                <span class="ml-2 text-gray-700">Enter</span>
+              </div>
+              <div class="inline-flex items-center">
+                <input
+                  type="radio"
+                  value="exitFullScreen"
+                  @change="onFullScreenChange"
+                  v-model="selectedFullScreenOption"
+                  class="form-radio h-5 w-5 text-blue-600"
+                />
+                <span class="ml-2 text-gray-700">Exit</span>
               </div>
             </form>
           </div>
