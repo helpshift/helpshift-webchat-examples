@@ -1,5 +1,10 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
+
+let unreadMessageCount = ref(0);
+const newUnreadMessagesEventHandler = function (data) {
+  unreadMessageCount.value = data.unreadCount;
+};
 
 onMounted(() => {
   const script = document.createElement("script");
@@ -43,6 +48,20 @@ onMounted(() => {
 
   `;
   document.body.appendChild(script);
+
+  Helpshift(
+    "addEventListener",
+    "newUnreadMessages",
+    newUnreadMessagesEventHandler
+  );
+});
+
+onUnmounted(() => {
+  Helpshift(
+    "removeEventListener",
+    "newUnreadMessages",
+    newUnreadMessagesEventHandler
+  );
 });
 
 let isLoggedIn = ref(false);
@@ -50,6 +69,7 @@ let selectedPrivacyOption = ref("disable");
 let selectedLauncherOption = ref("showLauncher");
 let position = ref("bottom-right");
 let selectedFullScreenOption = ref("exitFullScreen");
+
 
 const updateHelpshiftConfig = () => {
   Helpshift("updateHelpshiftConfig");
@@ -255,6 +275,20 @@ const onFullScreenChange = (event) => {
               </div>
             </form>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-full border-gray-300 mt-12 rounded-lg">
+      <h3
+        class="py-2 pl-3 text-lg rounded-t-lg font-bold uppercase text-gray-800"
+      >
+        Event handlers
+      </h3>
+      <div class="m-3">
+        <div className="mt-4 flex justify-between">
+          <h3 className="text-lg py-2">Unread Message Count</h3>
+          <div className="mr-2 p-2">Count: {{ unreadMessageCount }}</div>
         </div>
       </div>
     </div>
