@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 
 onMounted(() => {
   const script = document.createElement("script");
@@ -45,6 +45,22 @@ onMounted(() => {
   document.body.appendChild(script);
 });
 
+let isLoggedIn = ref(false);
+
+const onLogin = () => {
+  isLoggedIn.value = true;
+  helpshiftConfig.userId = "captain_planet12";
+  helpshiftConfig.userEmail = "captain@example.com";
+  Helpshift("updateHelpshiftConfig");
+};
+
+const onLogout = () => {
+  isLoggedIn.value = false;
+  helpshiftConfig.userId = "";
+  helpshiftConfig.userEmail = "";
+  Helpshift("updateHelpshiftConfig");
+};
+
 const updateHelpshiftConfig = () => {
   Helpshift("updateHelpshiftConfig");
 };
@@ -83,6 +99,13 @@ const updateHelpshiftConfig = () => {
             <button @click="updateHelpshiftConfig">
               Update Helpshift Config
             </button>
+          </div>
+        </div>
+        <div className="mt-2 flex justify-between">
+          <h4 className="text-lg py-2">Login user</h4>
+          <div>
+            <button v-if="isLoggedIn" @click="onLogout">Logout</button>
+            <button v-else @click="onLogin">Login</button>
           </div>
         </div>
       </div>
