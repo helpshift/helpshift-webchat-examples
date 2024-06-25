@@ -1,20 +1,23 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from "vue";
 
-let unreadMessageCount = ref(0);
-const newUnreadMessagesEventHandler = function (data) {
-  unreadMessageCount.value = data.unreadCount;
-};
-
 onMounted(() => {
   const script = document.createElement("script");
   script.text = `
     (function () {
 
+      // @NOTE: In order to load Web Chat, you have to set the PLATFORM_ID and DOMAIN in the script.
+      // https://developers.helpshift.com/web-chat/getting-started/#manual-embed
+
       var PLATFORM_ID = "${import.meta.env.VITE_APP_PLATFORM_ID}",
         DOMAIN = "${import.meta.env.VITE_APP_DOMAIN}",
         LANGUAGE = "en";
 
+      // Do not modify the code below
+
+      // @NOTE: It's a good idea to set all widget options and information here.
+      // However, in the case where some information needs to be added later (async),
+      // use the updateHelpshiftConfig API https://developers.helpshift.com/web-chat/api/
 
       window.helpshiftConfig = {
         platformId: PLATFORM_ID,
@@ -46,8 +49,13 @@ onMounted(() => {
         } else window.Helpshift("update");
       })(document, "hs-chat");
 
+      // Do not modify the code above
   `;
   document.body.appendChild(script);
+
+  // @NOTE: In order to add an event to the window, you should add it
+  // when the component mounts using onMounted()
+  // and remove it when the component unmounts using onUnmounted();
 
   Helpshift(
     "addEventListener",
@@ -56,6 +64,7 @@ onMounted(() => {
   );
 });
 
+// @NOTE: In order to remove New Unread Messages event handler, add the following code.
 onUnmounted(() => {
   Helpshift(
     "removeEventListener",
@@ -63,6 +72,13 @@ onUnmounted(() => {
     newUnreadMessagesEventHandler
   );
 });
+
+// @NOTE: In order to add New Unread Messages event handler, add the following code.
+const newUnreadMessagesEventHandler = function (data) {
+  unreadMessageCount.value = data.unreadCount;
+};
+
+let unreadMessageCount = ref(0);
 
 let isLoggedIn = ref(false);
 let selectedPrivacyOption = ref("disable");
@@ -73,11 +89,14 @@ let messageEventListenerIsAdded = ref(false);
 let message = ref("");
 
 const updateHelpshiftConfig = () => {
+  // @NOTE: If you want to update the helpshiftConfig object after your web page
+  //  has loaded, you can do it by calling the following API.
   Helpshift("updateHelpshiftConfig");
 };
 
 const onLogin = () => {
   isLoggedIn.value = true;
+  // @NOTE: You can update the data in config object using the below code.
   helpshiftConfig.userId = "captain_planet12";
   helpshiftConfig.userEmail = "captain@example.com";
   Helpshift("updateHelpshiftConfig");
@@ -107,8 +126,10 @@ const onLauncherChange = (event) => {
   const val = event.target.value;
   selectedLauncherOption.value = val;
   if (val === "showLauncher") {
+    // @NOTE: You can show Web Chat completely by calling the following API.
     Helpshift("show");
   } else {
+    // @NOTE: You can hide Web Chat completely by calling the following API.
     Helpshift("hide");
   }
 };
@@ -129,7 +150,13 @@ const onFullScreenChange = (event) => {
 
   Helpshift("updateHelpshiftConfig");
 };
+//  @NOTE: We do not recommend adding events dynamically (on button clicks)
+// Instead, we prefer to add them
+// when the component mounts, and remove them when the component unmounts
 
+// However, if you still want to start listening to events on some action, then this is the right way
+// @NOTE: To add Message Add event handler, add the following code.
+// This event is triggered when the user adds a message to a conversation.
 var messageAddEventHandler = function (data) {
   message.value = data.body;
 };
@@ -139,6 +166,7 @@ const onAddMessageEventClick = () => {
   Helpshift("addEventListener", "messageAdd", messageAddEventHandler);
 };
 
+// @NOTE: In order to remove Message Add event handler, add the following code.
 const onRemoveMessageEventClick = () => {
   messageEventListenerIsAdded.value = false;
   Helpshift("removeEventListener", "messageAdd", messageAddEventHandler);
