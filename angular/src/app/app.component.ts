@@ -1,6 +1,8 @@
 import { Component, Renderer2, NgZone } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { environment } from '../environments/environment.development';
+import { FormGroup, FormControl } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 declare const Helpshift: any;
 declare const helpshiftConfig: any;
@@ -8,7 +10,7 @@ declare const helpshiftConfig: any;
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, ReactiveFormsModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
@@ -18,13 +20,15 @@ export class AppComponent {
   constructor(private renderer: Renderer2, private ngZone: NgZone) {}
 
   isLoggedIn: boolean = false;
-  selectedPrivacyOption: string = 'disable';
-  selectedLauncherOption: string = 'showLauncher';
+
   position: string = 'bottom-right';
-  selectedFullScreenOption: string = 'exitFullScreen';
+
   unreadMessageCount: any = 0;
+
   messageEventListenerIsAdded: boolean = false;
+
   message: string = '';
+
   messageAddEventHandlerReference: any;
 
   newUnreadMessagesEventHandler: any;
@@ -138,26 +142,29 @@ export class AppComponent {
     this.message = '';
   }
 
+  privacyForm = new FormGroup({
+    selectedPrivacyOption: new FormControl('disable'),
+  });
+
   onFullPrivacyChange(event: any) {
     let val = event.target.value;
     if (val === 'enable') {
-      this.selectedPrivacyOption = 'enable';
       helpshiftConfig.fullPrivacy = true;
     } else {
-      this.selectedPrivacyOption = 'disable';
       helpshiftConfig.fullPrivacy = false;
     }
     Helpshift('updateHelpshiftConfig');
   }
 
+  launcherForm = new FormGroup({
+    selectedLauncherOption: new FormControl('showLauncher'),
+  });
   onLauncherChange(event: any) {
     const val = event.target.value;
     if (val === 'showLauncher') {
-      this.selectedLauncherOption = 'showLauncher';
       // @NOTE: You can show Web Chat completely by calling the following API.
       Helpshift('show');
     } else {
-      this.selectedLauncherOption = 'hideLauncher';
       // @NOTE: You can hide Web Chat completely by calling the following API.
       Helpshift('hide');
     }
@@ -173,9 +180,12 @@ export class AppComponent {
     Helpshift('updateHelpshiftConfig');
   }
 
+  fullScreenForm = new FormGroup({
+    selectedFullScreenOption: new FormControl('exitFullScreen'),
+  });
+
   onFullScreenChange(event: any) {
     const val = event.target.value;
-    this.selectedFullScreenOption = val;
     if (val === 'enterFullScreen') {
       helpshiftConfig.widgetOptions.fullScreen = true;
     } else {

@@ -45,14 +45,14 @@
       <div class="mt-2 flex justify-between">
         <h4 class="text-lg py-2">Full Privacy</h4>
         <div class="flex flex-col space-y-2 p-2">
-          <form>
+          <form [formGroup]="privacyForm">
             <div class="inline-flex items-center mr-4">
               <input
                 type="radio"
                 class="form-radio h-5 w-5 text-blue-600"
                 value="enable"
                 (change)="onFullPrivacyChange($event)"
-                [checked]="selectedPrivacyOption === 'enable'"
+                formControlName="selectedPrivacyOption"
               />
               <span class="ml-2 text-gray-700"> Enable Full Privacy </span>
             </div>
@@ -62,7 +62,7 @@
                 class="form-radio h-5 w-5 text-blue-600"
                 value="disable"
                 (change)="onFullPrivacyChange($event)"
-                [checked]="selectedPrivacyOption === 'disable'"
+                formControlName="selectedPrivacyOption"
               />
               <span class="ml-2 text-gray-700"> Disable Full Privacy </span>
             </div>
@@ -82,14 +82,14 @@
       <div class="mt-2 flex justify-between">
         <h4 class="text-lg py-2">Launcher options</h4>
         <div class="flex flex-col space-y-2 p-2">
-          <form>
+          <form [formGroup]="launcherForm">
             <div class="inline-flex items-center mr-4">
               <input
                 type="radio"
                 class="form-radio h-5 w-5 text-blue-600"
                 value="showLauncher"
                 (change)="onLauncherChange($event)"
-                [checked]="selectedLauncherOption === 'showLauncher'"
+                formControlName="selectedLauncherOption"
               />
               <span class="ml-2 text-gray-700"> Show </span>
             </div>
@@ -99,7 +99,7 @@
                 class="form-radio h-5 w-5 text-blue-600"
                 value="hideLauncher"
                 (change)="onLauncherChange($event)"
-                [checked]="selectedLauncherOption === 'hideLauncher'"
+                formControlName="selectedLauncherOption"
               />
               <span class="ml-2 text-gray-700"> Hide </span>
             </div>
@@ -125,14 +125,14 @@
       <div class="mt-2 flex justify-between">
         <h4 class="text-lg py-2">Full screen mode</h4>
         <div class="flex flex-col space-y-2 p-2">
-          <form>
+          <form [formGroup]="fullScreenForm">
             <div class="inline-flex items-center mr-4">
               <input
                 type="radio"
                 class="form-radio h-5 w-5 text-blue-600"
                 value="enterFullScreen"
                 (change)="onFullScreenChange($event)"
-                [checked]="selectedFullScreenOption === 'enterFullScreen'"
+                formControlName="selectedFullScreenOption"
               />
               <span class="ml-2 text-gray-700"> Enter </span>
             </div>
@@ -142,7 +142,7 @@
                 class="form-radio h-5 w-5 text-blue-600"
                 value="exitFullScreen"
                 (change)="onFullScreenChange($event)"
-                [checked]="selectedFullScreenOption === 'exitFullScreen'"
+                formControlName="selectedFullScreenOption"
               />
               <span class="ml-2 text-gray-700"> Exit </span>
             </div>
