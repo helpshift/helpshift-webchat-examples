@@ -99,7 +99,9 @@ const onLogin = () => {
   // @NOTE: You can update the data in config object using the below code.
   helpshiftConfig.userId = "captain_planet12";
   helpshiftConfig.userEmail = "captain@example.com";
+
   Helpshift("updateHelpshiftConfig");
+
   message.value = "";
 };
 
@@ -107,18 +109,22 @@ const onLogout = () => {
   isLoggedIn.value = false;
   helpshiftConfig.userId = "";
   helpshiftConfig.userEmail = "";
+
   Helpshift("updateHelpshiftConfig");
+
   message.value = "";
 };
 
 const onFullPrivacyChange = (event) => {
   const val = event.target.value;
   selectedPrivacyOption.value = val;
+
   if (val === "enable") {
     helpshiftConfig.fullPrivacy = true;
   } else {
     helpshiftConfig.fullPrivacy = false;
   }
+
   Helpshift("updateHelpshiftConfig");
 };
 
@@ -136,12 +142,14 @@ const onLauncherChange = (event) => {
 
 const onWidgetPositionApply = () => {
   helpshiftConfig.widgetOptions.position = position.value;
+
   Helpshift("updateHelpshiftConfig");
 };
 
 const onFullScreenChange = (event) => {
   const val = event.target.value;
   selectedFullScreenOption.value = val;
+
   if (val === "exitFullScreen") {
     helpshiftConfig.widgetOptions.fullScreen = false;
   } else {
@@ -157,18 +165,20 @@ const onFullScreenChange = (event) => {
 // However, if you still want to start listening to events on some action, then this is the right way
 // @NOTE: To add Message Add event handler, add the following code.
 // This event is triggered when the user adds a message to a conversation.
-var messageAddEventHandler = function (data) {
+const messageAddEventHandler = function (data) {
   message.value = data.body;
 };
 
 const onAddMessageEventClick = () => {
   messageEventListenerIsAdded.value = true;
+
   Helpshift("addEventListener", "messageAdd", messageAddEventHandler);
 };
 
 // @NOTE: In order to remove Message Add event handler, add the following code.
 const onRemoveMessageEventClick = () => {
   messageEventListenerIsAdded.value = false;
+
   Helpshift("removeEventListener", "messageAdd", messageAddEventHandler);
 };
 </script>
