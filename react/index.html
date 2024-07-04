@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web Chat</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+    <script>
+      (function () {
+        // @NOTE: In order to load Web Chat, you have to set the PLATFORM_ID and DOMAIN in the script.
+        // https://developers.helpshift.com/web-chat/getting-started/#manual-embed
+        var PLATFORM_ID = "%VITE_REACT_APP_PLATFORM_ID%",
+          DOMAIN = "%VITE_REACT_APP_DOMAIN%",
+          LANGUAGE = "en";
+
+        /* Do not modify the code below */
+
+        // @NOTE: It's a good idea to set all widget options and information here.
+        // However, in the case where some information needs to be added later (async),
+        // use the updateHelpshiftConfig API https://developers.helpshift.com/web-chat/api/
+
+        window.helpshiftConfig = {
+          platformId: PLATFORM_ID,
+          domain: DOMAIN,
+          language: LANGUAGE,
+          widgetOptions: {},
+        };
+      })();
+
+      !(function (t, e) {
+        if ("function" != typeof window.Helpshift) {
+          var n = function () {
+            n.q.push(arguments);
+          };
+          (n.q = []), (window.Helpshift = n);
+          var i,
+            a = t.getElementsByTagName("script")[0];
+          if (t.getElementById(e)) return;
+          (i = t.createElement("script")),
+            (i.async = !0),
+            (i.id = e),
+            (i.src = "https://webchat.helpshift.com/latest/webChat.js");
+          var o = function () {
+            window.Helpshift("init");
+          };
+          window.attachEvent
+            ? i.attachEvent("onload", o)
+            : i.addEventListener("load", o, !1),
+            a.parentNode.insertBefore(i, a);
+        } else window.Helpshift("update");
+      })(document, "hs-chat");
+
+      /* Do not modify the code above */
+    </script>
+  </body>
+</html>
